@@ -16,12 +16,6 @@ class DynamicPagesSeeder extends Seeder
     {
         $pages = [
             [
-                'page_title'   => 'About Us',
-                'page_slug'    => Str::slug('About Us'),
-                'page_content' => '<p>This is the About Us page content.</p>',
-                'status'       => 'active',
-            ],
-            [
                 'page_title'   => 'Privacy Policy',
                 'page_slug'    => Str::slug('Privacy Policy'),
                 'page_content' => '<p>This is the Privacy Policy content.</p>',

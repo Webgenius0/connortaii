@@ -13,7 +13,8 @@ class UserSeeder extends Seeder
     {
         // Normal User
         User::create([
-            'name' => 'User',
+            'first_name' => 'User',
+            'last_name' => 'Test',
             'email' => 'user@user.com',
             'password' => Hash::make('12345678'),
             'email_verified_at' => Carbon::now(),
@@ -21,7 +22,8 @@ class UserSeeder extends Seeder
 
         // Admin User
         User::create([
-            'name' => 'Admin',
+            'first_name' => 'Admin',
+            'last_name' => 'User',
             'email' => 'admin@admin.com',
             'password' => Hash::make('12345678'),
             'email_verified_at' => Carbon::now(),

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\DynamicPageController;
 use App\Http\Controllers\Api\SocialAuthController;
 use App\Http\Controllers\Api\SocialMediaController;
 use App\Http\Controllers\Api\SystemSettingController;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/social-login', [SocialAuthController::class, 'socialLogin']);
 
+Route::get('pages', [DynamicPageController::class, 'index']);
+Route::get('pages/{slug}', [DynamicPageController::class, 'show']);
 Route::controller(RegisterController::class)->prefix('users/register')->group(function () {
     // User Register
     Route::post('/', 'userRegister');

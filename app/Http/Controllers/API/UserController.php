@@ -30,16 +30,21 @@ class UserController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'name'   => 'sometimes|nullable|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:20480',
+            'first_name' => 'sometimes|nullable|string|max:255',
+            'last_name'  => 'sometimes|nullable|string|max:255',
+            'avatar'     => 'nullable|image|mimes:jpeg,png,jpg,svg|max:20480',
         ]);
 
         if ($validator->fails()) {
             return $this->error($validator->errors(), 'Validation Error', 422);
         }
 
-        if ($request->filled('name')) {
-            $user->name = $request->name;
+        if ($request->filled('first_name')) {
+            $user->first_name = $request->first_name;
+        }
+
+        if ($request->filled('last_name')) {
+            $user->last_name = $request->last_name;
         }
 
         if ($request->hasFile('avatar')) {
@@ -50,7 +55,6 @@ class UserController extends Controller
 
         return $this->success($user, 'Profile updated successfully', 200);
     }
-
     public function updatePassword(Request $request)
     {
         $user = Auth::user();
@@ -83,18 +87,6 @@ class UserController extends Controller
     public function deleteAccount(Request $request)
     {
         $user = Auth::user();
-
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors(), 'Validation Error', 422);
-        }
-
-        if (!$this->authService->checkPassword($user, $request->password)) {
-            return $this->error([], 'Password is incorrect', 400);
-        }
 
         $user->delete();
 

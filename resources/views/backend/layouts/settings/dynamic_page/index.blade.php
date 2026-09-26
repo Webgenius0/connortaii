@@ -11,10 +11,7 @@
                 <div class="col-lg-12">
                     <div class="p-5 card">
                         <div class="card-style mb-30">
-                            <div class="mb-3 d-flex justify-content-end">
-                                <a href="{{ route('admin.dynamic_page.create') }}" class="btn btn-primary">Add New
-                                    Page</a>
-                            </div>
+
                             <div class="table-wrapper table-responsive">
                                 <table id="data-table" class="table">
                                     <thead>

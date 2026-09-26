@@ -59,7 +59,6 @@ class LoginController extends Controller
 
         return $this->success($user, 'User authenticated successfully', 200);
     }
-
     public function emailVerify(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -72,9 +71,9 @@ class LoginController extends Controller
 
         $user = User::where('email', $request->email)->first();
         $code = $this->otpService->generateForUser($user);
-        Mail::to($user->email)->send(new ForgotPasswordOtp($user, $code));
+        // Mail::to($user->email)->send(new ForgotPasswordOtp($user, $code));
 
-        return $this->success([], 'OTP has been sent successfully.', 200);
+        return $this->success(['otp' => $code], 'OTP has been sent successfully.', 200);
     }
 
     public function otpResend(Request $request)

@@ -15,6 +15,14 @@ return new class () extends Migration {
             $table->unsignedBigInteger('user_id')->nullable(); // made nullable
             $table->string('verification_code', 4);
             $table->timestamp('expires_at');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone_code')->nullable();
+            $table->string('phone')->nullable();
+            $table->boolean('agree_to_terms')->default(false);
+            $table->string('avatar')->nullable();
+            $table->string('password')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

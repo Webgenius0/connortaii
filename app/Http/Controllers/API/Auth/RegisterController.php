@@ -30,13 +30,12 @@ class RegisterController extends Controller
     public function userRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'          => 'required|string|max:255',
-            'email'         => 'required|email',
-            'password'      => ['required', 'string', 'min:8', 'confirmed'],
-            'phone_code'    => 'nullable|string|max:10',
-            'phone'         => 'nullable|string|max:20',
+            'first_name'     => 'required|string|max:255',
+            'last_name'      => 'required|string|max:255',
+            'email'          => 'required|email',
+            'password'       => ['required', 'string', 'min:8', 'confirmed'],
             'agree_to_terms' => 'required|boolean',
-            'avatar'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'avatar'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -47,7 +46,7 @@ class RegisterController extends Controller
             return $this->error(['email' => ['The email has already been taken.']], "Validation Error", 422);
         }
         $avatarPath = $this->avatarService->upload($request->file('avatar'));
-        $data = $request->only('name', 'email', 'password', 'phone_code', 'phone');
+        $data = $request->only('first_name', 'last_name', 'email', 'password', 'phone_code', 'phone', 'agree_to_terms');
         $data['avatar'] = $avatarPath;
 
         $code = $this->otpService->generate($request->email, $data);
@@ -103,9 +102,9 @@ class RegisterController extends Controller
 
         $tempUser = EmailOtp::where('email', $request->email)->first();
         $code = $this->otpService->resend($request->email);
-        Mail::to($request->email)->send(new RegistrationOtp($tempUser, $code));
+        // Mail::to($request->email)->send(new RegistrationOtp($tempUser, $code));
 
-        return $this->success([], 'OTP resent successfully.', 200);
+        return $this->success(['otp' => $code], 'OTP resent successfully.', 200);
     }
 
     public function emailExists(Request $request)

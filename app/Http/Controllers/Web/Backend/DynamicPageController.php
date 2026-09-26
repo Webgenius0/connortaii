@@ -61,9 +61,7 @@ class DynamicPageController extends Controller
                               <a href="' . route('admin.dynamic_page.edit', ['id' => $data->id]) . '" type="button" class="text-white btn btn-primary" title="Edit">
                              <i class="fa fa-pencil" aria-hidden="true"></i>
                               </a>
-                              <a href="#" onclick="showDeleteConfirm(' . $data->id . ')" type="button" class="text-white btn btn-danger" title="Delete">
-                              <i class="fa fa-trash-o" aria-hidden="true"></i>
-                            </a>
+                             
                             </div>';
                 })
                 ->rawColumns(['page_content', 'status', 'action'])

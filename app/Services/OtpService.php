@@ -18,13 +18,15 @@ class OtpService implements RegistrationOtpInterface, UserOtpInterface
         EmailOtp::updateOrCreate(
             ['email' => $email],
             [
-                'name'              => $data['name'],
+                'first_name'        => $data['first_name'],
+                'last_name'         => $data['last_name'],
                 'password'          => Hash::make($data['password']),
                 'phone_code'        => $data['phone_code'] ?? null,
                 'phone'             => $data['phone'] ?? null,
                 'avatar'            => $data['avatar'] ?? null,
+                'agree_to_terms'    => $data['agree_to_terms'] ?? null,
                 'verification_code' => $code,
-            'expires_at'        => Carbon::now('UTC')->addYears(10),
+                'expires_at'        => Carbon::now('UTC')->addYears(10),
                 'user_id'           => null,
             ]
         );
@@ -36,7 +38,6 @@ class OtpService implements RegistrationOtpInterface, UserOtpInterface
     {
         return EmailOtp::where('email', $email)
             ->where('verification_code', $code)
-
             ->exists();
     }
 
@@ -56,6 +57,7 @@ class OtpService implements RegistrationOtpInterface, UserOtpInterface
         return EmailOtp::where('email', $email)
             ->first();
     }
+
     public function generateForUser(User $user): int
     {
         $code = rand(1000, 9999);
@@ -63,7 +65,8 @@ class OtpService implements RegistrationOtpInterface, UserOtpInterface
         EmailOtp::updateOrCreate(
             ['user_id' => $user->id],
             [
-                'name'              => $user->name,
+                'first_name'        => $user->first_name,
+                'last_name'         => $user->last_name,
                 'email'             => $user->email,
                 'password'          => $user->password,
                 'avatar'            => $user->avatar ?? null,
