@@ -88,9 +88,9 @@ class LoginController extends Controller
 
         $user = User::where('email', $request->email)->first();
         $code = $this->otpService->generateForUser($user);
-        Mail::to($user->email)->send(new ForgotPasswordOtp($user, $code));
+        // Mail::to($user->email)->send(new ForgotPasswordOtp($user, $code));
 
-        return $this->success([], 'OTP has been sent successfully.', 200);
+        return $this->success(['otp' => $code], 'OTP has been sent successfully.', 200);
     }
 
     public function otpVerify(Request $request)
@@ -111,17 +111,22 @@ class LoginController extends Controller
             return $this->error([], 'Invalid or expired OTP', 400);
         }
 
-        $user->email_verified_at = now();
-        $user->save();
+        // email_verified_at এখানে সেট করবেন না — এটা registration এর জন্য, forgot-password এর জন্য না
+        $resetToken = \Illuminate\Support\Str::random(60);
 
-        return $this->success($user, 'OTP Verified Successfully', 200);
+        \App\Models\EmailOtp::where('user_id', $user->id)->update([
+            'reset_token' => $resetToken,
+        ]);
+
+        return $this->success(['reset_token' => $resetToken], 'OTP Verified Successfully', 200);
     }
 
     public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email'    => 'required|email|exists:users,email',
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email'       => 'required|email|exists:users,email',
+            'reset_token' => 'required|string',
+            'password'    => ['required', 'string', 'min:8', 'confirmed'],
         ], [
             'password.min' => 'The password must be at least 8 characters long.',
         ]);
@@ -131,7 +136,19 @@ class LoginController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
+
+        $validOtp = \App\Models\EmailOtp::where('user_id', $user->id)
+            ->where('reset_token', $request->reset_token)
+            ->first();
+
+        if (!$validOtp) {
+            return $this->error([], 'Invalid or expired reset token', 400);
+        }
+
         $this->authService->resetPassword($user, $request->password);
+
+        // token একবার ব্যবহারের পর invalidate করে দিন
+        $validOtp->update(['reset_token' => null]);
 
         return $this->success([], 'Password Reset successfully.', 200);
     }

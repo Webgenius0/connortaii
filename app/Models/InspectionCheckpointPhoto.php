@@ -13,6 +13,6 @@ class InspectionCheckpointPhoto extends Model
 
     public function checkpoint(): BelongsTo
     {
-        return $this->belongsTo(InspectionSectionCheckpoint::class, 'inspection_section_checkpoint_id');
+        return $this->belongsTo(InspectionSectionCheckpoint::class, 'checkpoint_id');
     }
 }

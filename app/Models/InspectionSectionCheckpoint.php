@@ -19,6 +19,6 @@ class InspectionSectionCheckpoint extends Model
 
     public function photos(): HasMany
     {
-        return $this->hasMany(InspectionCheckpointPhoto::class, 'inspection_section_checkpoint_id');
+        return $this->hasMany(InspectionCheckpointPhoto::class, 'checkpoint_id');
     }
 }

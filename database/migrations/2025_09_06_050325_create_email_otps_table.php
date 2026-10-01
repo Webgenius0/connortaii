@@ -20,6 +20,7 @@ return new class () extends Migration {
             $table->string('email')->nullable();
             $table->string('phone_code')->nullable();
             $table->string('phone')->nullable();
+            $table->string('reset_token')->nullable();
             $table->boolean('agree_to_terms')->default(false);
             $table->string('avatar')->nullable();
             $table->string('password')->nullable();

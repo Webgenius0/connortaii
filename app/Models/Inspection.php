@@ -34,4 +34,8 @@ class Inspection extends Model
     {
         return $this->hasMany(InspectionSection::class);
     }
+    public function reports(): HasMany
+    {
+        return $this->hasMany(InspectionReport::class);
+    }
 }
